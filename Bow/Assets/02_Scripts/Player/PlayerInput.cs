@@ -1,6 +1,5 @@
-using Unity.VisualScripting;
+using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -9,9 +8,10 @@ public class PlayerInput : MonoBehaviour
     [SerializeField, Tooltip("뒤 키")] private KeyCode backKey = KeyCode.S;
     [SerializeField, Tooltip("왼쪽 키")] private KeyCode leftKey = KeyCode.A;
     [SerializeField, Tooltip("오른쪽 키")] private KeyCode rightKey = KeyCode.D;
-
     [SerializeField, Tooltip("달리기 키")] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField, Tooltip("앉기 키")] private KeyCode squatKey = KeyCode.C;
     [SerializeField, Tooltip("점프 키")] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField, Tooltip("에임 키")] private KeyCode aimKey = KeyCode.Mouse1;
 
     [Header("[마우스 설정]")]
     [Tooltip("마우스 감도")] public float mouseSensitivity = 1.0f;
@@ -26,8 +26,11 @@ public class PlayerInput : MonoBehaviour
     public float Vectical { get; private set; }
     public bool IsSprint { get; private set; }
     public bool IsJump { get; private set; }
+    public bool IsSquat { get; private set; }
+    public bool IsAim { get; private set; }
     public bool cursorLocked { get; private set; } = true;
     public bool cursorInputForLock { get; private set; } = true;
+
 
     private void Update()
     {
@@ -35,6 +38,8 @@ public class PlayerInput : MonoBehaviour
         MoveInput();
         SprintInput();
         JumpInput();
+        AimInput();
+        SquatInput();
     }
 
     private void CameraInput()
@@ -69,6 +74,14 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    private void SquatInput()
+    {
+        if (Input.GetKeyDown(squatKey))
+        {
+            IsSquat = !IsSquat;
+        }
+    }
+
     private void SprintInput()
     {
         IsSprint = Input.GetKey(sprintKey);
@@ -77,6 +90,11 @@ public class PlayerInput : MonoBehaviour
     private void JumpInput()
     {
         IsJump = Input.GetKeyDown(jumpKey);
+    }
+
+    private void AimInput()
+    {
+        IsAim = Input.GetKey(aimKey);
     }
 
     private void OnApplicationFocus(bool hasFocus)

@@ -9,6 +9,10 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("[회전 설정]")]
     [SerializeField, Tooltip("회전 속도")] private float _rotationSpeed = 15.0f;
 
+
+
+
+
     private Camera _camera;
     private PlayerInput _playerInput;
     private CharacterController _characterController;

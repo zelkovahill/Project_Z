@@ -9,9 +9,8 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("[회전 설정]")]
     [SerializeField, Tooltip("회전 속도")] private float _rotationSpeed = 15.0f;
 
-
-
-
+    [Header("[구르기 설정]")]
+    [SerializeField, Tooltip("구르기 속도")] private float _rollSpeed = 10.0f;
 
     private Camera _camera;
     private PlayerInput _playerInput;
@@ -57,4 +56,10 @@ public class PlayerLocomotion : MonoBehaviour
             }
         }
     }
+
+    public void Roll(Vector3 rollDirection)
+    {
+        _characterController.Move(rollDirection * _rollSpeed * Time.deltaTime);
+    }
+
 }

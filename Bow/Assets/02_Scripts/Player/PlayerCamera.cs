@@ -7,6 +7,15 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField, Tooltip("카메라 회전 상단 제한 각도")] private float _topClampAngle = 70.0f;
     [SerializeField, Tooltip("카메라 회전 하단 제한 각도")] private float _bottomClampAngle = -30.0f;
 
+    [Header("[줌 설정]")]
+    [SerializeField, Tooltip("플레이어 줌 카메라 오브젝트")] private GameObject _playerZoomCamera;
+
+    [Header("[에임 설정]")]
+    [SerializeField, Tooltip("에임 레이어 마스크")] private LayerMask _aimLayerMask;
+    [SerializeField, Tooltip("에임 오브젝트")] private GameObject _aimObject;
+    [SerializeField, Tooltip("에임 거리")] private float _aimDistance = 20f;
+
+
     private float _cameraTargetYaw;
     private float _cameraTargetPitch;
     private const float THRESHOLD = 0.01f;
@@ -21,6 +30,40 @@ public class PlayerCamera : MonoBehaviour
     private void LateUpdate()
     {
         RotateCamera();
+    }
+
+    public void ZoomIn()
+    {
+        _playerZoomCamera.SetActive(true);
+    }
+
+    public void ZoomOut()
+    {
+        _playerZoomCamera.SetActive(false);
+    }
+
+    public void AimingCamera()
+    {
+        Vector3 targetPosition;
+        Transform camTransform = Camera.main.transform;
+        RaycastHit hit;
+
+        if (Physics.Raycast(camTransform.position, camTransform.forward, out hit, Mathf.Infinity, _aimLayerMask))
+        {
+            targetPosition = hit.point;
+            _aimObject.transform.position = hit.point;
+        }
+        else
+        {
+            targetPosition = camTransform.position + camTransform.forward * _aimDistance;
+            _aimObject.transform.position = camTransform.position + camTransform.forward * _aimDistance;
+        }
+
+        Vector3 targetAim = targetPosition;
+        targetAim.y = _cameraTarget.position.y;
+        Vector3 aimDirection = (targetAim - _cameraTarget.position).normalized;
+
+        transform.forward = Vector3.Lerp(transform.forward, aimDirection, Time.deltaTime * 50f);
     }
 
     private void RotateCamera()

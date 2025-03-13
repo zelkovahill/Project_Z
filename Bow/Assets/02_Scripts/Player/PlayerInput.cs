@@ -9,9 +9,11 @@ public class PlayerInput : MonoBehaviour
     [SerializeField, Tooltip("왼쪽 키")] private KeyCode leftKey = KeyCode.A;
     [SerializeField, Tooltip("오른쪽 키")] private KeyCode rightKey = KeyCode.D;
     [SerializeField, Tooltip("달리기 키")] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField, Tooltip("구르기 키")] private KeyCode rollKey = KeyCode.Space;
     [SerializeField, Tooltip("앉기 키")] private KeyCode squatKey = KeyCode.C;
-    [SerializeField, Tooltip("점프 키")] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField, Tooltip("에임 키")] private KeyCode aimKey = KeyCode.Mouse1;
+    // [SerializeField, Tooltip("점프 키")] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField, Tooltip("에임 키")] private KeyCode JoomKey = KeyCode.Mouse1;
+    [SerializeField, Tooltip("공격 키")] private KeyCode attackKey = KeyCode.Mouse0;
 
     [Header("[마우스 설정]")]
     [Tooltip("마우스 감도")] public float mouseSensitivity = 1.0f;
@@ -27,9 +29,12 @@ public class PlayerInput : MonoBehaviour
     public bool IsSprint { get; private set; }
     public bool IsJump { get; private set; }
     public bool IsSquat { get; private set; }
-    public bool IsAim { get; private set; }
+    public bool IsJoom { get; private set; }
+    public bool IsRoll { get; private set; }
+    public bool IsAttack { get; private set; }
     public bool cursorLocked { get; private set; } = true;
     public bool cursorInputForLock { get; private set; } = true;
+
 
 
     private void Update()
@@ -37,9 +42,11 @@ public class PlayerInput : MonoBehaviour
         CameraInput();
         MoveInput();
         SprintInput();
-        JumpInput();
-        AimInput();
+        // JumpInput();
+        JoomInput();
         SquatInput();
+        RollInput();
+        AttackInput();
     }
 
     private void CameraInput()
@@ -87,14 +94,24 @@ public class PlayerInput : MonoBehaviour
         IsSprint = Input.GetKey(sprintKey);
     }
 
-    private void JumpInput()
+    private void AttackInput()
     {
-        IsJump = Input.GetKeyDown(jumpKey);
+        IsAttack = Input.GetKeyDown(attackKey);
     }
 
-    private void AimInput()
+    // private void JumpInput()
+    // {
+    //     IsJump = Input.GetKeyDown(jumpKey);
+    // }
+
+    private void RollInput()
     {
-        IsAim = Input.GetKey(aimKey);
+        IsRoll = Input.GetKeyDown(rollKey);
+    }
+
+    private void JoomInput()
+    {
+        IsJoom = Input.GetKey(JoomKey);
     }
 
     private void OnApplicationFocus(bool hasFocus)
